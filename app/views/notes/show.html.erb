@@ -1,0 +1,45 @@
+<%- model_class = Note -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+
+<span class="notes_nav">
+  <ul class="nav nav-pills nav-stacked">
+    <li><a href="/notes">Owned by me</a></li>
+    <li class="active"><a href="/notes/show">Shared with me</a></li>
+  </ul>
+</span>
+
+<span class="notes_content">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><%= model_class.human_attribute_name(:title) %></th>
+        <th><%= model_class.human_attribute_name(:created_at) %></th>
+        <th><%= model_class.human_attribute_name(:shared_by) %></th>
+        <th><%= model_class.human_attribute_name(:level_of_access) %></th>
+        <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% (current_user.authorizations.select{|a| a.access != "author"}).each do |auth| %>
+        <% note = Note.find_by_id(auth.note_id)%>
+
+        <tr>
+          <td><%= note.title %></td>
+          <td><%=l note.created_at %></td>
+          <td><%= (User.find_by_id(auth.given_access_by)).email %></td>
+          <td><%= auth.access %></td>
+          <td>
+            <%= link_to t('.open', :default => t("helpers.links.open")),
+                        open_note_path(note), :class => 'btn btn-mini' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to t('.new', :default => t("helpers.links.new")),
+              new_note_path,
+              :class => 'btn btn-primary' %>
+</span>

@@ -1,0 +1,29 @@
+<div class="page-header">
+  <% note = Note.find_by_id(session[:note_id])%>
+  <h1> <%= "Share " + note.title %> </h1>
+</div>
+
+<%= form_tag authorizations_path do %>
+  <div class="control-group">
+    <%= label_tag 'email', 'User email', :class => 'control-label' %>
+    <%= text_field_tag "email", "", :class => 'text_field'  %>
+  </div>
+
+  <div> Permissions </div>
+  <div>
+    <span class = "radio_button">
+      <%= radio_button_tag 'level', 'write' %>
+      <%= label_tag 'level_write', 'Write' %>
+    </span>
+    <span class = "radio_button">
+      <%= radio_button_tag 'level', 'read' %>
+      <%= label_tag 'level_read', 'Read' %>
+    </span>
+  </div>
+
+   <div class="form-actions">
+    <%= submit_tag nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                authorizations_url, :class => 'btn' %>
+  </div>
+<% end %>

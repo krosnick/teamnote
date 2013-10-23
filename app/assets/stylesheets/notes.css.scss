@@ -1,0 +1,23 @@
+// Place all the styles related to the Notes controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.text_display {
+  width: 800px;
+  height: 300px;
+}
+
+.notes_nav {
+  float: left;
+  width: 200px;
+  margin-right: 50px;
+}
+
+.notes_content{
+  float: left;
+  width: 700px;
+}
+
+#preview{
+	height: 100px
+}

@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  access: MyString
+  given_access_by: MyString
+
+two:
+  access: MyString
+  given_access_by: MyString

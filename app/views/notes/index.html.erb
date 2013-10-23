@@ -1,0 +1,56 @@
+<%- model_class = Note -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+
+<span class="notes_nav">
+  <ul class="nav nav-pills nav-stacked">
+    <li class="active"><a href="/notes">Owned by me</a></li>
+    <li><a href="/notes/show">Shared with me</a></li>
+  </ul>
+</span>
+
+<span class="notes_content">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><%= model_class.human_attribute_name(:title) %></th>
+        <th><%= model_class.human_attribute_name(:created_at) %></th>
+        <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% (current_user.authorizations.select{|a| a.access == "author"}).each do |auth| %>
+        <% note = Note.find_by_id(auth.note_id)%>
+        <%= form_for(note, remote: true) do |f| %>
+        <tr>
+          <td class="title" id= <%= "note_" + auth.note_id.to_s %>> <%= note.title %> </td>
+          <td><%=l note.created_at %></td>
+          <td>
+            <%= link_to t('.open', :default => t("helpers.links.open")),
+                        open_note_path(note), :class => 'btn btn-mini' %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        note_path(note),
+                        :method => :delete,
+                        :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                        :class => 'btn btn-mini btn-danger' %>
+            <%= link_to t('.share', :default => t("helpers.links.share")),
+                        authorizations_url(:note_id => note.id), :class => 'btn btn-mini' %>
+          </td>
+        </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to t('.new', :default => t("helpers.links.new")),
+              new_note_path,
+              :class => 'btn btn-primary' %>
+</span>
+
+<div>
+Content Preview:
+</div>
+<div id="preview">
+  
+</div>
